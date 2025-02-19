@@ -1,4 +1,4 @@
 
 
 all:
-	g++ mtg_ui.cpp include/glad.c -Iinclude -lglfw3 -o mtg_ui
+	g++ mtg_ui.cpp include/glad.c shader.h -Iinclude -lglfw3 -o mtg_ui
