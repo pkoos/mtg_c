@@ -10,6 +10,8 @@ void processInput(GLFWwindow * window);
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+int flip = 1;
+int counter = 0;
 
 int main() {
     glfwInit();
@@ -41,6 +43,12 @@ int main() {
         0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f // top
     };
 
+    // float vertices_upside_down[] = {
+    //     -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // left
+    //     0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // right
+    //     0.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f // top
+    // };
+
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -49,7 +57,7 @@ int main() {
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_upside_down), vertices_upside_down, GL_STATIC_DRAW);
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -82,7 +90,6 @@ int main() {
         float timeValue = glfwGetTime();
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
         int vertexColorLocation = glGetUniformLocation(ourShader.ID, "ourColor");
-
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -90,7 +97,11 @@ int main() {
 
         // draw our first triangle
         // glUseProgram(shaderProgram);
+        counter++;
         ourShader.use();
+        if(counter % 60 == 0) {
+            ourShader.setInt("flip", flip *= -1);
+        }
 
         glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.05, 1.05);
 
